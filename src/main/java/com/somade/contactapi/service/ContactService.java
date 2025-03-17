@@ -30,6 +30,9 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class ContactService {
     private final ContactRepo contactRepo;
 
+    public ContactService(ContactRepo contactRepo) {
+        this.contactRepo = contactRepo;}
+
     public Page<Contact> getAllContacts(int page, int size){
         return contactRepo.findAll(PageRequest.of(page, size, Sort.by("name")));
     }
@@ -47,9 +50,10 @@ public class ContactService {
     }
 
     public String uploadPhoto(String id, MultipartFile file){
+//        log.info("Saving picture for user ID: {}", id);
         Contact contact = getContact(id);
         String photoUrl = photoFunction.apply(id, file);
-        contact.setPhotoUrl(photoUrl);
+//        contact.setPhotoUrl(photoUrl);
         contactRepo.save(contact);
         return photoUrl;
     }
